@@ -1,8 +1,9 @@
 import { Router, Response, Request } from 'express';
-const API_KEY: string = process.env.GOOGLE_MAPS_KEY || '';
-
 import URLS from 'src/URLs';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+import AutocompletePredictionInterface from 'src/interfaces/google_routes/AutocompleteResponse.model';
+
+const API_KEY: string = process.env.GOOGLE_MAPS_KEY || '';
 const mapsRouter: Router = Router();
 
 mapsRouter.get('/search', async (req: Request, res: Response) => {
@@ -12,7 +13,7 @@ mapsRouter.get('/search', async (req: Request, res: Response) => {
     const url: string =
       URLS['googleFindPlace'] +
       `?query=${input}&key=${API_KEY}&fields=formatted_address%2Cname%2Cgeometry+locationbias=circle:12000@54.397398,%2018.571607`;
-    const response = await axios.get(url);
+    const response: AxiosResponse = await axios.get(url);
     return res.status(200).send(response.data);
   } catch (e) {
     return res.status(500).send(e);
@@ -26,10 +27,26 @@ mapsRouter.get('/autocomplete', async (req: Request, res: Response) => {
       URLS['googleAutoComplete'] +
       `?input=${input}&key=${API_KEY}&location=54.397398,%2018.571607&radius=1200&fields=formatted_address%2Cdescription`;
     console.log(url);
-    const response = await axios.get(url);
+    const response: AxiosResponse = await axios.get(url);
 
     if (response.status !== 200) return res.status(500).send('No response from Google');
-    return res.status(200).send(response.data);
+
+    const predictions: google.maps.places.AutocompletePrediction[] = response.data.predictions;
+    const ourPreds: AutocompletePredictionInterface[] = predictions.map(
+      (prediction: google.maps.places.AutocompletePrediction) => {
+        const { description, place_id, reference } = prediction;
+        const { main_text, secondary_text } = prediction.structured_formatting;
+        const newPred: AutocompletePredictionInterface = {
+          description,
+          placeId: place_id,
+          reference,
+          mainText: main_text,
+          secondaryText: secondary_text
+        };
+        return newPred;
+      }
+    );
+    return res.status(200).send(ourPreds);
   } catch (e) {
     return res.status(500).send(e);
   }
