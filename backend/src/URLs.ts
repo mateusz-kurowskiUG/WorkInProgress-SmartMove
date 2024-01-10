@@ -1,4 +1,6 @@
-const URLS: object = {
+import URLSInterface from './interfaces/URLS.model';
+
+const URLS: URLSInterface = {
   googleRoutes: 'https://routes.googleapis.com/directions/v2:computeRoutes',
   mevoStations: 'https://gbfs.urbansharing.com/rowermevo.pl/station_information.json',
   mevoStationsDetails: 'https://gbfs.urbansharing.com/rowermevo.pl/station_status.json',
