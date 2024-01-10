@@ -18,9 +18,23 @@ export default function SearchBar() {
     AutoCompleteItem[] | null
   >(null);
 
-  const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleSubmit = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    val = null,
+  ): void => {
     e.preventDefault();
-    console.log(e.target.value);
+    if (autocomplete === null) {
+      return;
+    }
+    if (autocomplete.length === 0) {
+      return;
+    }
+    if (val) {
+      console.log(val);
+    } else {
+      console.log(autocomplete[0]);
+    }
+
     setAutocomplete(null);
     setSearch("");
   };
@@ -45,16 +59,16 @@ export default function SearchBar() {
 
   return (
     <div>
-      <form className="">
+      <form onSubmit={(e) => handleSubmit(e)} className="">
         <div className="relative">
           <input
             className="input input-primary"
             value={search}
             onChange={(e) => handleOnChange(e)}
           />
-          <button type="submit" className="btn btn-ghost absolute right-0">
-            <FaSearch />
-          </button>
+          {/* <button type="submit" className="btn btn-ghost absolute right-0"> */}
+          {/*   <FaSearch /> */}
+          {/* </button> */}
         </div>
         <div className="">
           {autocomplete !== null &&
@@ -65,8 +79,10 @@ export default function SearchBar() {
                     type="radio"
                     id={item.placeId}
                     name="location"
-                    value={item.description}
-                    onChange={(e) => handleSubmit(e)}
+                    value={item}
+                    onChange={(e) => {
+                      handleSubmit(e, item);
+                    }}
                   />
                   <label className="btn btn-primary" htmlFor={item.placeId}>
                     {item.description}
