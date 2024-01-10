@@ -25,6 +25,10 @@ const DisplayMap = () => {
     libraries: libraries as any,
   });
 
+  const handleMapClick = (e: google.maps.MapMouseEvent) => {
+    setMarker(e.latLng);
+  };
+
   const mapOptions = useMemo<google.maps.MapOptions>(
     () => ({
       disableDefaultUI: false,
@@ -39,6 +43,7 @@ const DisplayMap = () => {
     );
     console.log(response.data);
     setMarker(response.data.results[0].geometry.location);
+    setLocation(response.data.results[0].geometry.location);
   };
   useEffect(() => {
     if ("geolocation" in navigator) {
@@ -76,6 +81,9 @@ const DisplayMap = () => {
           bottom: 0,
         }}
         onLoad={() => console.log("Map Component Loaded...")}
+        onClick={(e) => {
+          handleMapClick(e);
+        }}
       >
         {marker && <MarkerF position={marker} />}
       </GoogleMap>
