@@ -5,6 +5,7 @@ import axios from "axios";
 
 const DisplayMap = () => {
   const libraries = useMemo(() => ["places"], []);
+  // setting default location to Gdańsk
   const [location, setLocation] = useState({
     lat: 54.3961354,
     lng: 18.5694547,
