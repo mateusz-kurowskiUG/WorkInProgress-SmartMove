@@ -16,9 +16,9 @@ const DisplayMap = () => {
 
   const mapOptions = useMemo<google.maps.MapOptions>(
     () => ({
-      disableDefaultUI: true,
+      disableDefaultUI: false,
       clickableIcons: true,
-      scrollwheel: false,
+      scrollwheel: true,
     }),
     [],
   );
