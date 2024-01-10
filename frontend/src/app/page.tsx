@@ -1,11 +1,14 @@
 import DisplayMap from "./DisplayMap";
 import SearchBar from "./components/SearchBar";
+import RouteContextProvider from "@/contexts/route-context";
 
 export default function Home() {
   return (
     <div>
-      <SearchBar />
-      <DisplayMap />
+      <RouteContextProvider>
+        <SearchBar />
+        <DisplayMap />
+      </RouteContextProvider>
     </div>
   );
 }
