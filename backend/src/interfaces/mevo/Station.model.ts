@@ -1,15 +1,14 @@
-import CordsInterface from "./Cords.model";
+import CordsInterface from './Cords.model';
 
 interface StationInterface {
-  station_id: number;
+  stationId: number;
   name: string;
   address: string;
-  cross_street: string;
+  crossStreet: string;
   lat: number;
   lon: number;
-  is_virtual_station: boolean;
+  isVirtualStation: boolean;
   capacity: number;
-  status: number;
   stationArea: CordsInterface[];
 }
 export default StationInterface;

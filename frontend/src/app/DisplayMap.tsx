@@ -5,6 +5,7 @@ import axios from "axios";
 
 const DisplayMap = () => {
   const libraries = useMemo(() => ["places"], []);
+  // setting default location to Gdańsk
   const [location, setLocation] = useState({
     lat: 54.3961354,
     lng: 18.5694547,
@@ -24,6 +25,10 @@ const DisplayMap = () => {
     libraries: libraries as any,
   });
 
+  const handleMapClick = (e: google.maps.MapMouseEvent) => {
+    setMarker(e.latLng);
+  };
+
   const mapOptions = useMemo<google.maps.MapOptions>(
     () => ({
       disableDefaultUI: false,
@@ -38,6 +43,7 @@ const DisplayMap = () => {
     );
     console.log(response.data);
     setMarker(response.data.results[0].geometry.location);
+    setLocation(response.data.results[0].geometry.location);
   };
   useEffect(() => {
     if ("geolocation" in navigator) {
@@ -58,8 +64,16 @@ const DisplayMap = () => {
         zoom={14}
         center={location}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
-        mapContainerStyle={{ width: "800px", height: "800px" }}
+        mapContainerStyle={{
+          height: "90vh",
+          position: "fixed",
+          width: "100vw",
+          bottom: 0,
+        }}
         onLoad={() => console.log("Map Component Loaded...")}
+        onClick={(e) => {
+          handleMapClick(e);
+        }}
       >
         {marker && <MarkerF position={marker} />}
       </GoogleMap>
