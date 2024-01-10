@@ -1,11 +1,11 @@
-type WaypointType = WaypointInterface & UnionWaypoint;
+type TWaypoint = WaypointInterface & TUnionWaypoint;
 interface WaypointInterface {
   via: boolean;
   vehicleStopover: boolean;
-  sideOfRoad: "";
+  sideOfRoad: '';
 }
 
-type UnionWaypoint = LocationInterface | PlaceIdInterface | AddressInterface;
+type TUnionWaypoint = LocationInterface | PlaceIdInterface | AddressInterface;
 interface LocationInterface {
   location: string;
 }
@@ -16,4 +16,4 @@ interface AddressInterface {
   address: string;
 }
 
-export default WaypointInterface;
+export default TWaypoint;
