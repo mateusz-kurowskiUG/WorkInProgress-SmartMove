@@ -4,6 +4,7 @@ import Input from "@/components/Input";
 import { Form, Formik } from "formik";
 import React from "react";
 import { FaSearch } from "react-icons/fa";
+import Settings from "./Settings";
 
 export default function SearchBar() {
   const handleSubmit = (values): void => {
@@ -25,6 +26,7 @@ export default function SearchBar() {
           </button>
         </Form>
       </Formik>
+      <Settings />
     </div>
   );
 }
