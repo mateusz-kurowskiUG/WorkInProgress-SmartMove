@@ -3,6 +3,7 @@ import { errorHandler } from './middleware/errorMiddleware';
 import './environment/loadEnvironment';
 import mevoRouter from './routes/mevo.routes';
 import mapsRouter from './routes/maps.routes';
+import tierRouter from './routes/tier.routes';
 import cors from 'cors';
 const port: string = process.env.PORT || '5000';
 
@@ -13,6 +14,7 @@ app.use(cors());
 const router: Router = Router();
 router.use('/api/mevo', mevoRouter);
 router.use('/api/maps', mapsRouter);
+router.use('/api/tier', tierRouter);
 app.use(router);
 app.get('/hello', (req: Request, res: Response) => {
   res.send('Hello world!');

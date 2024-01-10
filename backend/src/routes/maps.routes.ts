@@ -25,8 +25,9 @@ mapsRouter.get('/autocomplete', async (req: Request, res: Response) => {
   try {
     const url: string =
       URLS['googleAutoComplete'] +
-      `?input=${input}&key=${API_KEY}&location=54.397398,%2018.571607&radius=1200&fields=formatted_address%2Cdescription`;
+      `?input=${input}&key=${API_KEY}&radius=1200&locationrestriction=circle:12000@54.397398%2018.571607&fields=formatted_address%2Cdescription";//`;
     const response: AxiosResponse = await axios.get(url);
+    console.log(response.data);
 
     if (response.status !== 200) return res.status(500).send('No response from Google');
 

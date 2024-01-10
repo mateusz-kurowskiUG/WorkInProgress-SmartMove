@@ -4,14 +4,39 @@ import axios, { AxiosResponse } from 'axios';
 import StationInterface from 'src/interfaces/mevo/Station.model';
 import CordsInterface from 'src/interfaces/mevo/Cords.model';
 import StationDetailsInterface from 'src/interfaces/mevo/StationDetails.model';
+import StationWithDistance from 'src/interfaces/mevo/StationWithDistance';
 const mevoRouter: Router = Router();
+
+mevoRouter.get('/stations/closest', async (req: Request, res: Response) => {
+  const { lat, lon }: { lat: number; lon: number } = req.query;
+  if (!lat || !lon) return res.status(400).send('No lat or lon provided');
+  try {
+    const stations: StationInterface[] = (await axios.get('http://localhost:5000/api/mevo/stations')).data;
+    const closestStations: StationWithDistance[] = stations
+      .map((station: StationInterface) => {
+        const distance: number = Math.sqrt(Math.pow(station.lat - lat, 2) + Math.pow(station.lon - lon, 2));
+        return { station, distance };
+      })
+      .sort((a: StationWithDistance, b: StationWithDistance) => a.distance - b.distance)
+      .filter(({ distance }: { distance: number }) => {
+        return distance < 0.0025;
+      })
+      .map(({ station, distance }: { station: StationInterface; distance: number }) => {
+        return { station, distance: Math.floor(distance * 1000 * 111) };
+      });
+
+    return res.status(200).send(closestStations);
+  } catch (e) {
+    return res.status(400).send(e);
+  }
+});
 
 mevoRouter.get('/stations', async (req: Request, res: Response) => {
   try {
     const response: AxiosResponse = await axios.get(URLS['mevoStations']);
     // console.log(response.data);
     const mevos: StationInterface[] = response.data.data.stations.map((station) => {
-      const fixedCords: CordsInterface = station.station_area.coordinates
+      const fixedCords: CordsInterface[] = station.station_area.coordinates
         .flat()
         .flat()
         .map(([lat, lon]: [lat: number, lat: number]) => {
