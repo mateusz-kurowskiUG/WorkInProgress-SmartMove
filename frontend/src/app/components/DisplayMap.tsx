@@ -5,7 +5,7 @@ import axios from "axios";
 import { useRouteContext } from "@/contexts/route-context";
 
 const DisplayMap = () => {
-  const startPoint = useRouteContext();
+  const routeContext = useRouteContext();
   const libraries = useMemo(() => ["places"], []);
   // setting default location to Gdańsk
   const [location, setLocation] = useState<google.maps.LatLng | any>({
@@ -15,17 +15,18 @@ const DisplayMap = () => {
 
   const [mapClick, setMapClick] = useState<google.maps.LatLng | null>(null);
 
-  const [marker, setMarker] = useState<
-    null | google.maps.LatLng | google.maps.LatLngLiteral
-  >(null);
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string,
     libraries: libraries as any,
   });
 
   const handleMapClick = (e: google.maps.MapMouseEvent) => {
-    setMapClick(e.latLng);
-    startPoint.setStartPoint(e.latLng);
+    if (mapClick === null) {
+      setMapClick(e.latLng);
+      routeContext.setStartPoint(e.latLng);
+    } else {
+      routeContext.setEndPoint(e.latLng);
+    }
   };
 
   const mapOptions = useMemo<google.maps.MapOptions>(
@@ -42,17 +43,15 @@ const DisplayMap = () => {
       "http://localhost:5000/api/maps/search?input=" + location,
     );
     console.log(response.data);
-    setMarker(response.data.results[0].geometry.location);
     setLocation(response.data.results[0].geometry.location);
   };
   useMemo(() => {
-    if (startPoint.startPoint) {
-      if (startPoint.startPoint !== mapClick) {
-        setLocation(startPoint.startPoint);
+    if (routeContext.startPoint) {
+      if (routeContext.startPoint !== mapClick) {
+        setLocation(routeContext.startPoint);
       }
-      setMarker(startPoint.startPoint);
     }
-  }, [startPoint.startPoint]);
+  }, [routeContext.startPoint]);
 
   useEffect(() => {
     if ("geolocation" in navigator) {
@@ -74,17 +73,21 @@ const DisplayMap = () => {
         center={location}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
         mapContainerStyle={{
-          height: "90vh",
-          position: "fixed",
+          height: "80vh",
+          position: "absolute",
           width: "100vw",
           bottom: 0,
+          left: 0,
         }}
         onLoad={() => console.log("Map Component Loaded...")}
         onClick={(e) => {
           handleMapClick(e);
         }}
       >
-        {marker && <MarkerF position={marker} />}
+        {routeContext.startPoint && (
+          <MarkerF position={routeContext.startPoint} />
+        )}
+        {routeContext.endPoint && <MarkerF position={routeContext.endPoint} />}
       </GoogleMap>
     </div>
   );

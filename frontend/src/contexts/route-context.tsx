@@ -11,6 +11,8 @@ interface RouteContextType {
   setStartPoint: React.Dispatch<
     React.SetStateAction<google.maps.LatLng | null>
   >;
+  endPoint: google.maps.LatLng | null;
+  setEndPoint: React.Dispatch<React.SetStateAction<google.maps.LatLng | null>>;
 }
 
 const RouteContext = createContext<RouteContextType | null>(null);
@@ -29,9 +31,12 @@ export default function RouteContextProvider({
   children,
 }: RouteContextProviderProps): JSX.Element {
   const [startPoint, setStartPoint] = useState<google.maps.LatLng | null>(null);
+  const [endPoint, setEndPoint] = useState<google.maps.LatLng | null>(null);
 
   return (
-    <RouteContext.Provider value={{ startPoint, setStartPoint }}>
+    <RouteContext.Provider
+      value={{ startPoint, setStartPoint, endPoint, setEndPoint }}
+    >
       {children}
     </RouteContext.Provider>
   );

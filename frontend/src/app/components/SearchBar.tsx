@@ -14,7 +14,7 @@ interface AutoCompleteItem {
 }
 
 export default function SearchBar() {
-  const startPoint = useRouteContext();
+  const routeContext = useRouteContext();
   const [search, setSearch] = React.useState("");
   const [autocomplete, setAutocomplete] = React.useState<
     AutoCompleteItem[] | null
@@ -47,7 +47,7 @@ export default function SearchBar() {
       "http://localhost:5000/api/maps/search?input=" + location,
     );
     console.log(response.data);
-    startPoint.setStartPoint(response.data.results[0].geometry.location);
+    routeContext.setStartPoint(response.data.results[0].geometry.location);
   };
   const fetchAutocomplete = async (search: string): Promise<void> => {
     const response = await axios.get(
@@ -58,7 +58,7 @@ export default function SearchBar() {
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
-    if (e.target.value.length < 3) {
+    if (e.target.value.length < 2) {
       setAutocomplete(null);
     }
     setSearch(e.target.value);
@@ -69,37 +69,79 @@ export default function SearchBar() {
 
   return (
     <div>
-      <form onSubmit={(e) => handleSubmit(e)} className="">
-        <div className="relative">
+      <form
+        onSubmit={(e) => handleSubmit(e)}
+        className="flex flex-col items-center "
+      >
+        <div>
+          <div className="relative">
+            <label htmlFor="starting-point">Start: </label>
+            <input
+              id="starting-point"
+              className="input input-primary"
+              value={search}
+              onChange={(e) => handleOnChange(e)}
+            />
+            {/* <button type="submit" className="btn btn-ghost absolute right-0"> */}
+            {/*   <FaSearch /> */}
+            {/* </button> */}
+          </div>
+          <div className="">
+            {autocomplete !== null &&
+              autocomplete.map((item) => {
+                return (
+                  <div key={item.placeId}>
+                    <input
+                      type="radio"
+                      id={item.placeId}
+                      name="location"
+                      value={item.mainText}
+                      onChange={(e) => {
+                        handleSubmit(e, e.target.value);
+                      }}
+                    />
+                    <label className="btn btn-primary" htmlFor={item.placeId}>
+                      {item.description}
+                    </label>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+        <div>
+          <label htmlFor="end-point">End: </label>
           <input
+            id="end-point"
             className="input input-primary"
             value={search}
             onChange={(e) => handleOnChange(e)}
           />
-          {/* <button type="submit" className="btn btn-ghost absolute right-0"> */}
-          {/*   <FaSearch /> */}
-          {/* </button> */}
+          <div className="">
+            {autocomplete !== null &&
+              autocomplete.map((item) => {
+                return (
+                  <div key={item.placeId}>
+                    <input
+                      type="radio"
+                      id={item.placeId}
+                      name="location"
+                      value={item.mainText}
+                      onChange={(e) => {
+                        handleSubmit(e, e.target.value);
+                      }}
+                    />
+                    <label className="btn btn-primary" htmlFor={item.placeId}>
+                      {item.description}
+                    </label>
+                  </div>
+                );
+              })}
+          </div>
         </div>
-        <div className="">
-          {autocomplete !== null &&
-            autocomplete.map((item) => {
-              return (
-                <div key={item.placeId}>
-                  <input
-                    type="radio"
-                    id={item.placeId}
-                    name="location"
-                    value={item.mainText}
-                    onChange={(e) => {
-                      handleSubmit(e, e.target.value);
-                    }}
-                  />
-                  <label className="btn btn-primary" htmlFor={item.placeId}>
-                    {item.description}
-                  </label>
-                </div>
-              );
-            })}
+        <div>
+          <button type="submit" className="btn btn-primary ">
+            Find route <FaSearch />
+          </button>
         </div>
       </form>
     </div>
