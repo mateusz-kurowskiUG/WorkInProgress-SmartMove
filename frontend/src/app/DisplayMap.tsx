@@ -53,7 +53,7 @@ const DisplayMap = () => {
   }
   return (
     <div>
-      <div>
+      <div className="text-center mt-3">
         <form onSubmit={(e) => onSubmit(e)}>
           <input
             type="text"
@@ -68,7 +68,12 @@ const DisplayMap = () => {
         zoom={14}
         center={location}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
-        mapContainerStyle={{ width: "800px", height: "800px" }}
+        mapContainerStyle={{
+          height: "90vh",
+          position: "fixed",
+          width: "100vw",
+          bottom: 0,
+        }}
         onLoad={() => console.log("Map Component Loaded...")}
       >
         {marker && <MarkerF position={marker} />}
