@@ -2,14 +2,18 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
 import axios from "axios";
+import { useRouteContext } from "@/contexts/route-context";
 
 const DisplayMap = () => {
+  const startPoint = useRouteContext();
   const libraries = useMemo(() => ["places"], []);
   // setting default location to Gdańsk
-  const [location, setLocation] = useState({
+  const [location, setLocation] = useState<google.maps.LatLng | any>({
     lat: 54.3961354,
     lng: 18.5694547,
   });
+
+  const [mapClick, setMapClick] = useState<google.maps.LatLng | null>(null);
 
   const [marker, setMarker] = useState<
     null | google.maps.LatLng | google.maps.LatLngLiteral
@@ -20,7 +24,8 @@ const DisplayMap = () => {
   });
 
   const handleMapClick = (e: google.maps.MapMouseEvent) => {
-    setMarker(e.latLng);
+    setMapClick(e.latLng);
+    startPoint.setStartPoint(e.latLng);
   };
 
   const mapOptions = useMemo<google.maps.MapOptions>(
@@ -31,6 +36,7 @@ const DisplayMap = () => {
     }),
     [],
   );
+
   const fetchLocationByName = async (location: string) => {
     const response = await axios.get(
       "http://localhost:5000/api/maps/search?input=" + location,
@@ -39,6 +45,15 @@ const DisplayMap = () => {
     setMarker(response.data.results[0].geometry.location);
     setLocation(response.data.results[0].geometry.location);
   };
+  useMemo(() => {
+    if (startPoint.startPoint) {
+      if (startPoint.startPoint !== mapClick) {
+        setLocation(startPoint.startPoint);
+      }
+      setMarker(startPoint.startPoint);
+    }
+  }, [startPoint.startPoint]);
+
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(({ coords }) => {

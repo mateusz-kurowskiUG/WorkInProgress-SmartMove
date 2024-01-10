@@ -1,4 +1,4 @@
-import DisplayMap from "./DisplayMap";
+import DisplayMap from "./components/DisplayMap";
 import SearchBar from "./components/SearchBar";
 import RouteContextProvider from "@/contexts/route-context";
 

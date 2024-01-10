@@ -3,6 +3,7 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
+import { useRouteContext } from "@/contexts/route-context";
 
 interface AutoCompleteItem {
   description: string;
@@ -13,14 +14,15 @@ interface AutoCompleteItem {
 }
 
 export default function SearchBar() {
+  const startPoint = useRouteContext();
   const [search, setSearch] = React.useState("");
   const [autocomplete, setAutocomplete] = React.useState<
     AutoCompleteItem[] | null
   >(null);
 
   const handleSubmit = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    val = null,
+    e: React.ChangeEvent<HTMLInputElement> | React.FormEvent<HTMLFormElement>,
+    val: string | null = null,
   ): void => {
     e.preventDefault();
     if (autocomplete === null) {
@@ -31,14 +33,22 @@ export default function SearchBar() {
     }
     if (val) {
       console.log(val);
+      fetchLocationByName(val);
     } else {
       console.log(autocomplete[0]);
+      fetchLocationByName(autocomplete[0].description);
     }
 
     setAutocomplete(null);
     setSearch("");
   };
-
+  const fetchLocationByName = async (location: string) => {
+    const response = await axios.get(
+      "http://localhost:5000/api/maps/search?input=" + location,
+    );
+    console.log(response.data);
+    startPoint.setStartPoint(response.data.results[0].geometry.location);
+  };
   const fetchAutocomplete = async (search: string): Promise<void> => {
     const response = await axios.get(
       "http://localhost:5000/api/maps/autocomplete?input=" + search,
@@ -79,9 +89,9 @@ export default function SearchBar() {
                     type="radio"
                     id={item.placeId}
                     name="location"
-                    value={item}
+                    value={item.mainText}
                     onChange={(e) => {
-                      handleSubmit(e, item);
+                      handleSubmit(e, e.target.value);
                     }}
                   />
                   <label className="btn btn-primary" htmlFor={item.placeId}>
