@@ -9,8 +9,6 @@ jobs:
   merge:
     runs-on: ubuntu-latest
     steps:
-      - name: merge
-      - uses: actions/checkout@master
       - name: Merge staging -> uat
         uses: devmasx/merge-branch@master
         with:
