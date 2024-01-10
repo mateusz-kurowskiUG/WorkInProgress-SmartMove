@@ -9,6 +9,12 @@ const DisplayMap = () => {
     lat: 54.3961354,
     lng: 18.5694547,
   });
+  const [input, setInput] = useState("");
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    fetchLocationByName(input);
+  };
 
   const [marker, setMarker] = useState<
     null | google.maps.LatLng | google.maps.LatLngLiteral
@@ -26,7 +32,13 @@ const DisplayMap = () => {
     }),
     [],
   );
-
+  const fetchLocationByName = async (location: string) => {
+    const response = await axios.get(
+      "http://localhost:5000/api/maps/search?input=" + location,
+    );
+    console.log(response.data);
+    setMarker(response.data.results[0].geometry.location);
+  };
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(({ coords }) => {
@@ -34,15 +46,6 @@ const DisplayMap = () => {
         setLocation({ lat: latitude, lng: longitude });
       });
     }
-
-    const fetchLocationByName = async (location: string) => {
-      const response = await axios.get(
-        "http://localhost:5000/api/maps/search/?input=" + location,
-      );
-      setMarker(response.data.results[0].geometry.location);
-    };
-
-    fetchLocationByName("Gdańsk");
   }, []);
 
   if (!isLoaded) {
@@ -51,7 +54,14 @@ const DisplayMap = () => {
   return (
     <div>
       <div>
-        <p>This is Sidebar...</p>
+        <form onSubmit={(e) => onSubmit(e)}>
+          <input
+            type="text"
+            className="input input-primary"
+            onChange={(e) => setInput(e.target.value)}
+          />
+          <input className="btn btn-primary" type="submit" value="Search" />
+        </form>
       </div>
       <GoogleMap
         options={mapOptions}
