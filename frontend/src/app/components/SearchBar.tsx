@@ -19,7 +19,7 @@ export default function SearchBar() {
         onSubmit={handleSubmit}
       >
         <Form className="flex">
-          <Input type="text" name="place" />
+          <Input type="text" name="place" placeholder="Search" />
           <button type="submit" className="btn rounded-bl-none rounded-br-none">
             <FaSearch />
           </button>
