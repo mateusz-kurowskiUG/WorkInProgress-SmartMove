@@ -30,11 +30,11 @@ const DisplayMap = () => {
       clickableIcons: true,
       scrollwheel: true,
     }),
-    [],
+    []
   );
   const fetchLocationByName = async (location: string) => {
     const response = await axios.get(
-      "http://localhost:5000/api/maps/search?input=" + location,
+      "http://localhost:5000/api/maps/search?input=" + location
     );
     console.log(response.data);
     setMarker(response.data.results[0].geometry.location);
@@ -53,16 +53,6 @@ const DisplayMap = () => {
   }
   return (
     <div>
-      <div>
-        <form onSubmit={(e) => onSubmit(e)}>
-          <input
-            type="text"
-            className="input input-primary"
-            onChange={(e) => setInput(e.target.value)}
-          />
-          <input className="btn btn-primary" type="submit" value="Search" />
-        </form>
-      </div>
       <GoogleMap
         options={mapOptions}
         zoom={14}
