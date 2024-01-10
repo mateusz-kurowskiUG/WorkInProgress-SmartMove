@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import StepRenting from "./StepRenting";
 import StepRoute from "./StepRoute";
