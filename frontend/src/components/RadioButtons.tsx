@@ -1,6 +1,7 @@
 import React from "react";
 import { Field, ErrorMessage } from "formik";
 import { FormOption } from "@/models/form-option";
+import { IconType } from "react-icons";
 
 interface RadioButtonsProps {
   label?: string;
@@ -32,7 +33,10 @@ function RadioButtons({
             htmlFor={option.value.toString()}
             className={option.buttonStyling ? option.buttonStyling : ""}
           >
-            {option.label}
+            <div className="flex flex-col items-center justify-center">
+              <div className="text-lg">{option.Icon && <option.Icon />}</div>
+              {option.label}
+            </div>
           </label>
         </div>
       ))}
