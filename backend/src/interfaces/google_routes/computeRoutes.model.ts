@@ -1,10 +1,13 @@
-import WaypointInterface from './Waypoint.model';
+import TWaypoint from './Waypoint.model';
 
 interface ComputeRoutesInterface {
-  origin: WaypointInterface;
-  destination: WaypointInterface;
-  intermediates: WaypointInterface[];
+  origin: TWaypoint;
+  destination: TWaypoint;
+  intermediates: TWaypoint[];
   travelMode: 'BICYCLE';
-  routingPreference: 'TRAFFIC_AWARE';
+  computeAlternativeRoutes: true;
+  departureTime: string;
+  languageCode: 'en-US';
+  units: 'METRIC';
 }
 export default ComputeRoutesInterface;
