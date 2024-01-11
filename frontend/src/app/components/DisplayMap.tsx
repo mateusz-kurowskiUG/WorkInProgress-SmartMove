@@ -20,14 +20,14 @@ const DisplayMap = () => {
     libraries: libraries as any,
   });
 
-  const handleMapClick = (e: google.maps.MapMouseEvent) => {
-    if (mapClick === null) {
-      setMapClick(e.latLng);
-      routeContext.setStartPoint(e.latLng);
-    } else {
-      routeContext.setEndPoint(e.latLng);
-    }
-  };
+  // const handleMapClick = (e: google.maps.MapMouseEvent) => {
+  //   if (mapClick === null) {
+  //     setMapClick(e.latLng);
+  //     routeContext.setStartPoint(e.latLng);
+  //   } else {
+  //     routeContext.setEndPoint(e.latLng);
+  //   }
+  // };
 
   const mapOptions = useMemo<google.maps.MapOptions>(
     () => ({
@@ -35,23 +35,16 @@ const DisplayMap = () => {
       clickableIcons: true,
       scrollwheel: true,
     }),
-    [],
+    []
   );
 
   const fetchLocationByName = async (location: string) => {
     const response = await axios.get(
-      "http://localhost:5000/api/maps/search?input=" + location,
+      "http://localhost:5000/api/maps/search?input=" + location
     );
     console.log(response.data);
     setLocation(response.data.results[0].geometry.location);
   };
-  useMemo(() => {
-    if (routeContext.startPoint) {
-      if (routeContext.startPoint !== mapClick) {
-        setLocation(routeContext.startPoint);
-      }
-    }
-  }, [routeContext]);
 
   useEffect(() => {
     if ("geolocation" in navigator) {
@@ -81,13 +74,13 @@ const DisplayMap = () => {
         }}
         onLoad={() => console.log("Map Component Loaded...")}
         onClick={(e) => {
-          handleMapClick(e);
+          // handleMapClick(e);
         }}
       >
-        {routeContext.startPoint && (
-          <MarkerF position={routeContext.startPoint} />
-        )}
-        {routeContext.endPoint && <MarkerF position={routeContext.endPoint} />}
+        {routeContext.points &&
+          routeContext.points.map((point, index) => (
+            <MarkerF key={index} position={point} />
+          ))}
       </GoogleMap>
     </div>
   );
