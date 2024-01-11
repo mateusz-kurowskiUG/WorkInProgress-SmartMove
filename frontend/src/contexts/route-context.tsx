@@ -34,6 +34,8 @@ export default function RouteContextProvider({
   const [isRented, setIsRented] = useState<boolean | null>(null);
   const [chosenMeans, setChosenMeans] = useState<Means[] | "">("");
   const [points, setPoints] = useState<google.maps.LatLng[] | null>(null);
+  const [directions, setDirections] =
+    useState<google.maps.DirectionsResult | null>(null);
 
   return (
     <RouteContext.Provider
