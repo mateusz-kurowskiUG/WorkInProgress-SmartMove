@@ -8,12 +8,12 @@ import React from "react";
 import * as Yup from "yup";
 
 export default function StepVehicle() {
-  const { chosenMeans, setChosenMeans } = useRouteContext();
+  const { setChosenMeans } = useRouteContext();
   const { setCurrStep } = useStepContext();
 
   const meansOptions: FormOption[] = [
-    { label: "Mevo", value: Means.MEVO, buttonStyling: "" },
-    { label: "Tier", value: Means.TIER, buttonStyling: "" },
+    { label: "Mevo", value: Means.MEVO, buttonStyling: "btn btn-primary" },
+    { label: "Tier", value: Means.TIER, buttonStyling: "btn btn-secondary" },
   ];
 
   const handleSubmit = (values) => {
