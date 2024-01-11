@@ -12,8 +12,16 @@ export default function StepVehicle() {
   const { setCurrStep } = useStepContext();
 
   const meansOptions: FormOption[] = [
-    { label: "Mevo", value: Means.MEVO, buttonStyling: "btn btn-primary flex-1" },
-    { label: "Tier", value: Means.TIER, buttonStyling: "btn btn-secondary flex-1" },
+    {
+      label: "Mevo",
+      value: Means.MEVO,
+      buttonStyling: "btn btn-primary flex-1",
+    },
+    {
+      label: "Tier",
+      value: Means.TIER,
+      buttonStyling: "btn btn-secondary flex-1",
+    },
   ];
 
   const handleSubmit = (values) => {
@@ -29,7 +37,7 @@ export default function StepVehicle() {
 
   return (
     <>
-      <div>Wybierz środek transportu</div>
+      <div className="text-center py-2">Wybierz środek transportu</div>
       <Formik
         initialValues={{
           chosenMeans: [],
@@ -38,7 +46,7 @@ export default function StepVehicle() {
         onSubmit={handleSubmit}
       >
         {(formik) => (
-          <Form className="flex flex-col" >
+          <Form className="flex flex-col">
             <CheckBoxes name="chosenMeans" options={meansOptions} />
             <button
               type="submit"
