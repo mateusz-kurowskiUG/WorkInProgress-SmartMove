@@ -20,7 +20,6 @@ export default function SearchBar({
 }) {
   const routeContext = useRouteContext();
   const [search, setSearch] = React.useState(defaultSearchFields);
-  const [searchEnd, setSearchEnd] = React.useState("");
 
   const [currentlySelected, setCurrentlySelected] = React.useState<number>(0);
   const [autocomplete, setAutocomplete] = React.useState<
@@ -31,7 +30,6 @@ export default function SearchBar({
     e: React.ChangeEvent<HTMLInputElement> | React.FormEvent<HTMLFormElement>
   ): void => {
     e.preventDefault();
-    routeContext.setPoints(null);
     search.forEach((item) => {
       fetchLocationByName(item.value, routeContext.setPoints);
     });

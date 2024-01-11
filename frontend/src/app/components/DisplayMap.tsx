@@ -81,6 +81,7 @@ const DisplayMap = () => {
         {
           origin: routeContext.points[routeContext.points.length - 1],
           destination: routeContext.points[0],
+          intermediary: routeContext.points.slice(1, -1),
           rented: true,
         }
       );
