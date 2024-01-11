@@ -6,9 +6,10 @@ import SearchBar from "./SearchBar";
 interface AddRouteProps {
   no: number;
   incrementNo: React.Dispatch<React.SetStateAction<number>>;
+  index: number;
 }
 
-export default function AddRoute({ no, incrementNo }: AddRouteProps) {
+export default function AddRoute({ no, incrementNo, index }: AddRouteProps) {
   const [isButtonClicked, setIsButtonClicked] = useState(false);
 
   const addRoute = () => {
@@ -24,13 +25,13 @@ export default function AddRoute({ no, incrementNo }: AddRouteProps) {
             <SearchBar
               defaultSearchFields={[
                 {
-                  name: `Stacja ${no}`,
+                  name: `Stacja ${index}`,
                   value: "",
                 },
               ]}
             />
           </li>
-          <AddRoute no={no} incrementNo={incrementNo} />
+          <AddRoute no={no} incrementNo={incrementNo} index={index + 1} />
         </>
       ) : (
         <li className="step">

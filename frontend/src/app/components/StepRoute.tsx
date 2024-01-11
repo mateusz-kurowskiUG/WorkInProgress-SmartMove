@@ -13,7 +13,7 @@ export default function StepRoute() {
           <SearchBar
             defaultSearchFields={[
               {
-                name: "startPoint",
+                name: "Początek przygody",
                 value: "",
               },
             ]}
@@ -32,6 +32,7 @@ export default function StepRoute() {
           Stacja Mevo
         </li>
         <AddRoute
+          index={1}
           no={generatedRoutesCount}
           incrementNo={setGenerateRoutesCount}
         />
@@ -43,7 +44,7 @@ export default function StepRoute() {
           <SearchBar
             defaultSearchFields={[
               {
-                name: "endPoint",
+                name: "Koniec podróży",
                 value: "",
               },
             ]}

@@ -87,7 +87,7 @@ export default function SearchBar({
               <div key={index}>
                 <input
                   className="input input-primary"
-                  placeholder={"test"}
+                  placeholder={defaultSearchFields[0].name}
                   value={search[index].value}
                   onChange={(e) => {
                     setSearch((prevSearch) => {
