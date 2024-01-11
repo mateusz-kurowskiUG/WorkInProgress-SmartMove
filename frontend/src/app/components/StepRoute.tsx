@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./StepRoute.module.css";
 import SearchBar from "./SearchBar";
 import AddRoute from "./AddRoute";
+import FindDestinationBtn from "./FindDestinationBtn";
 
 export default function StepRoute() {
   const [generatedRoutesCount, setGenerateRoutesCount] = useState(1);
@@ -50,6 +51,7 @@ export default function StepRoute() {
           />
         </li>
       </ul>
+      <FindDestinationBtn />
     </div>
   );
 }
