@@ -7,14 +7,10 @@ interface RouteContextProviderProps {
 }
 
 interface RouteContextType {
-  startPoint: google.maps.LatLng | null;
-  setStartPoint: React.Dispatch<
-    React.SetStateAction<google.maps.LatLng | null>
-  >;
-  endPoint: google.maps.LatLng | null;
-  setEndPoint: React.Dispatch<React.SetStateAction<google.maps.LatLng | null>>;
   isRented: boolean | null;
   setIsRented: React.Dispatch<React.SetStateAction<boolean | null>>;
+  points: google.maps.LatLng[] | null;
+  setPoints: React.Dispatch<React.SetStateAction<google.maps.LatLng[] | null>>;
 }
 
 const RouteContext = createContext<RouteContextType | null>(null);
@@ -32,19 +28,16 @@ export const useRouteContext = (): RouteContextType => {
 export default function RouteContextProvider({
   children,
 }: RouteContextProviderProps): JSX.Element {
-  const [startPoint, setStartPoint] = useState<google.maps.LatLng | null>(null);
-  const [endPoint, setEndPoint] = useState<google.maps.LatLng | null>(null);
   const [isRented, setIsRented] = useState<boolean | null>(null);
+  const [points, setPoints] = useState<google.maps.LatLng[] | null>(null);
 
   return (
     <RouteContext.Provider
       value={{
-        startPoint,
-        setStartPoint,
-        endPoint,
-        setEndPoint,
         isRented,
         setIsRented,
+        points,
+        setPoints,
       }}
     >
       {children}
