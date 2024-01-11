@@ -48,7 +48,7 @@ const DisplayMap = () => {
     const response = await axios.get(
       "http://localhost:5000/api/maps/search?input=" + location
     );
-    console.log(response.data);
+
     setLocation(response.data.results[0].geometry.location);
   };
 

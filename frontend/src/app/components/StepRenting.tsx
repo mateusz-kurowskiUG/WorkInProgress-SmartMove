@@ -12,8 +12,6 @@ export default function StepRenting() {
   const { setIsRented } = useRouteContext();
   const { setCurrStep } = useStepContext();
 
-  console.log(MdOutlineDirectionsBike);
-
   const isRentedOptions: FormOption[] = [
     {
       label: "Chcę wynająć",

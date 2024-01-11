@@ -29,7 +29,6 @@ export default function SearchBar({
   const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     fetchLocationByName(e.target.value, routeContext.setPoints);
-    console.log(routeContext.points);
   };
   const fetchLocationByName = async (
     location: string,
@@ -42,7 +41,6 @@ export default function SearchBar({
     const response = await axios.get(
       "http://localhost:5000/api/maps/search?input=" + location
     );
-    console.log(response.data);
     setPoints((prevPoints) => {
       if (prevPoints === null) {
         return [
@@ -54,7 +52,6 @@ export default function SearchBar({
       }
 
       const newPoints = [...prevPoints];
-      console.log("New points: ", newPoints);
       if (
         newPoints.filter((item) => item.name === defaultSearchFields[0].name)
           .length > 0
@@ -62,7 +59,6 @@ export default function SearchBar({
         const index = newPoints.findIndex(
           (item) => item.name === defaultSearchFields[0].name
         );
-        console.log("Index: ", index);
         newPoints[index].latlng = response.data.results[0].geometry.location;
       } else
         newPoints.push({
@@ -91,7 +87,6 @@ export default function SearchBar({
   ): void => {
     e.preventDefault();
     setCurrentlySelected(id);
-    console.log(e.target.value);
     handleAutoComplete(e.target.value);
   };
 
