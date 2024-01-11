@@ -5,14 +5,28 @@ import { FormOption } from "@/models/form-option";
 import { Form, Formik } from "formik";
 import React from "react";
 import * as Yup from "yup";
+import { MdOutlineDirectionsBike } from "react-icons/md";
+import { GiAwareness } from "react-icons/gi";
 
 export default function StepRenting() {
   const { setIsRented } = useRouteContext();
   const { setCurrStep } = useStepContext();
 
+  console.log(MdOutlineDirectionsBike);
+
   const isRentedOptions: FormOption[] = [
-    { label: "Chcę wynająć", value: "false", buttonStyling: "btn btn-primary" },
-    { label: "Wynajmuję", value: "true", buttonStyling: "btn btn-secondary" },
+    {
+      label: "Chcę wynająć",
+      value: "false",
+      buttonStyling: "btn btn-primary w-20",
+      Icon: MdOutlineDirectionsBike,
+    },
+    {
+      label: "Wynajmuję",
+      value: "true",
+      buttonStyling: "btn btn-secondary w-20",
+      Icon: GiAwareness,
+    },
   ];
 
   const validationSchema = Yup.object({
