@@ -60,10 +60,10 @@ export const findRoute = async (start: LatLng, end: LatLng, inter?: LatLng[]): R
       }
     });
 
+    console.log(1);
     const { data } = response;
-    const result: RouteResponse[] = data.routes.map((route: any) => {
+    const result: RouteResponse[] = data.routes.map((route) => {
       const { duration, distanceMeters, polyline } = route;
-      console.log(1);
 
       const newRoute: RouteResponse = {
         duration: duration.seconds,

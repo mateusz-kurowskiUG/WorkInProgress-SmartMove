@@ -6,6 +6,7 @@ import LatLng from 'src/interfaces/google_routes/LatLng';
 import { downloadStations, findClosest, findRoute, validateLatLng } from 'src/utils';
 import StationInterface from 'src/interfaces/mevo/Station.model';
 import StationWithDistance from 'src/interfaces/mevo/StationWithDistance';
+import RouteResponse from 'src/interfaces/google_routes/RouteResponse.model';
 
 const API_KEY: string = process.env.GOOGLE_MAPS_KEY || '';
 const mapsRouter: Router = Router();
@@ -55,21 +56,20 @@ mapsRouter.get('/autocomplete', async (req: Request, res: Response) => {
   }
 });
 
-const aToBWithMevo = async (A: LatLng, B: LatLng, inter: LatLng[]) => {
+const aToBWithMevo = async (A: LatLng, B: LatLng, inter: LatLng[] | undefined): RouteResponse[] => {
   const stations: StationInterface[] = await downloadStations();
 
   const aMevo: StationInterface = findClosest(stations, A)
     .map((station: StationWithDistance) => station.station)
-    .slice(0, 1);
+    .slice(0, 1)[0];
 
   const bMevo: StationInterface = findClosest(stations, B)
     .map((station: StationWithDistance) => station.station)
     .slice(0, 1)[0];
-
   const aMevoLatLng: LatLng = { latitude: aMevo.lat, longitude: aMevo.lon };
   const bMevoLatLng: LatLng = { latitude: bMevo.lat, longitude: bMevo.lon };
-
-  return findRoute(aMevoLatLng, bMevoLatLng, [A, ...inter, B]);
+  if (!inter) return await findRoute(aMevoLatLng, bMevoLatLng, [A, B]);
+  return await findRoute(aMevoLatLng, bMevoLatLng, [A, ...inter, B]);
 };
 // const z = () => {};
 
@@ -90,23 +90,12 @@ mapsRouter.post('/route', async (req: Request, res: Response) => {
     latitude: origLat,
     longitude: origLng
   };
-
   if (!validateLatLng(destCords) || !validateLatLng(origCords))
     return res.status(400).send('Invalid origin or destination provided');
 
   if (!rented && !chosenMeans) return res.status(400).send('No chosen means provided');
-  if (chosenMeans === 'MEVO') {
-    try {
-      console.log(origCords, destCords, intermediate);
-
-      const res = await aToBWithMevo(origCords, destCords, intermediate);
-      return res.status(200).send(res);
-    } catch (e) {
-      return res.status(500).send(e);
-    }
-  }
   try {
-    const result = await findRoute(origCords, destCords, intermediate);
+    const result: RouteResponse[] = await findRoute(origCords, destCords, intermediate);
     return res.status(200).send(result);
   } catch (e) {
     return res.status(500).send(e);
