@@ -51,7 +51,7 @@ const DisplayMap = () => {
         setLocation(routeContext.startPoint);
       }
     }
-  }, [routeContext.startPoint]);
+  }, [routeContext]);
 
   useEffect(() => {
     if ("geolocation" in navigator) {
