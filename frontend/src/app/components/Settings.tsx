@@ -50,7 +50,7 @@ export default function Settings() {
 
   return (
     <div>
-      <div className="steps text-xs flex ">
+      <div className="steps text-xs flex">
         {steps.map((step) => (
           <button
             key={step.step}

@@ -11,8 +11,8 @@ export default function StepRenting() {
   const { setCurrStep } = useStepContext();
 
   const isRentedOptions: FormOption[] = [
-    { label: "Chcę wynająć", value: "false", buttonStyling: "btn btn-primary" },
-    { label: "Wynajmuję", value: "true", buttonStyling: "btn btn-secondary" },
+    { label: "Chcę wynająć", value: "false", buttonStyling: "btn btn-primary flex-1" },
+    { label: "Wynajmuję", value: "true", buttonStyling: "btn btn-secondary flex-1" },
   ];
 
   const validationSchema = Yup.object({
@@ -25,15 +25,15 @@ export default function StepRenting() {
   };
 
   return (
-    <Formik
+    <Formik 
       initialValues={{
         isRented: "",
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      <Form>
-        <RadioButtons
+      <Form >
+        <RadioButtons 
           name="isRented"
           options={isRentedOptions}
           instantSubmit={handleSubmit}

@@ -16,7 +16,7 @@ function RadioButtons({
   ...props
 }: RadioButtonsProps): JSX.Element {
   return (
-    <div>
+    <div className="flex">
       {label && <label>{label}:</label>}
       {options.map((option, index) => (
         <div key={index}>

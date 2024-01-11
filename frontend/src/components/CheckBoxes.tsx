@@ -14,7 +14,7 @@ function CheckBoxes({
   ...props
 }: CheckBoxesProps): JSX.Element {
   return (
-    <div>
+    <div className="flex justify-evenly">
       {label && <label>{label}:</label>}
       {options.map((option, index) => (
         <div key={index}>
@@ -23,6 +23,7 @@ function CheckBoxes({
             id={option.value}
             {...props}
             value={option.value}
+            onChange={(e) => {}}
             className={option.buttonStyling ? "hidden" : ""}
           />
           <label
@@ -33,9 +34,7 @@ function CheckBoxes({
           </label>
         </div>
       ))}
-      <div style={{ color: "red" }}>
-        <ErrorMessage name={props.name} />
-      </div>
+      <ErrorMessage name={props.name} />
     </div>
   );
 }
