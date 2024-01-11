@@ -13,13 +13,13 @@ interface AutoCompleteItem {
   secondaryText: string;
 }
 
-export default function SearchBar() {
+export default function SearchBar({
+  defaultSearchFields,
+}: {
+  defaultSearchFields: { name: string; value: string }[];
+}) {
   const routeContext = useRouteContext();
-  const [search, setSearch] = React.useState([
-    { name: "start", value: "" },
-    { name: "via", value: "" },
-    { name: "end", value: "" },
-  ]);
+  const [search, setSearch] = React.useState(defaultSearchFields);
   const [searchEnd, setSearchEnd] = React.useState("");
 
   const [currentlySelected, setCurrentlySelected] = React.useState<number>(0);

@@ -9,10 +9,19 @@ export default function Home() {
     <div>
       <RouteContextProvider>
         <div className="bg-neutral absolute z-10 w-full">
-          <SearchBar />
-          <StepContextProvider>
-            <Settings />
-          </StepContextProvider>
+          <SearchBar
+            defaultSearchFields={[
+              {
+                name: "startPoint",
+                value: "",
+              },
+              {
+                name: "endPoint",
+                value: "",
+              },
+            ]}
+          />
+          <Settings />
         </div>
 
         <DisplayMap />
