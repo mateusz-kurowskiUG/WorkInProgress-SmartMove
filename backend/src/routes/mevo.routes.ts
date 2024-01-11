@@ -11,10 +11,10 @@ import { downloadStations, findClosest } from 'src/utils';
 const mevoRouter: Router = Router();
 
 mevoRouter.get('/stations/closest', async (req: Request, res: Response) => {
-  const { lat, lon }: { lat: number; lon: number } = req.query;
+  const { lat, lon } = req.query;
   if (!lat || !lon) return res.status(400).send('No lat or lon provided');
   try {
-    const stations: StationInterface[] | AxiosError<unknown, any> = await downloadStations();
+    const stations: StationInterface[] = downloadStations();
 
     const closestStations: StationWithDistance[] = findClosest(stations, { latitude: lat, longitude: lon });
 
