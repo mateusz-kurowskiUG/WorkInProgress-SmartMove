@@ -5,10 +5,13 @@ import Settings from "./components/Settings";
 
 export default function Home() {
   return (
-    <div>
+    <div >
       <RouteContextProvider>
-        <SearchBar />
-        <Settings />
+        <div className="bg-neutral absolute z-10 w-full">       
+           <SearchBar />
+          <Settings />
+        </div>
+
         <DisplayMap />
       </RouteContextProvider>
     </div>
