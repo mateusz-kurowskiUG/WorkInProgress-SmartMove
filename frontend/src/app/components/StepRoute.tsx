@@ -10,7 +10,14 @@ export default function StepRoute() {
     <div>
       <ul className="steps steps-vertical">
         <li data-content="⬇️" className="step step-primary">
-          Początek
+          <SearchBar
+            defaultSearchFields={[
+              {
+                name: "startPoint",
+                value: "",
+              },
+            ]}
+          />
         </li>
         {/* <li
           data-content="🛴"
@@ -33,7 +40,14 @@ export default function StepRoute() {
           Stacja Mevo
         </li>
         <li data-content="🏁" className="step">
-          Cel podróży
+          <SearchBar
+            defaultSearchFields={[
+              {
+                name: "endPoint",
+                value: "",
+              },
+            ]}
+          />
         </li>
       </ul>
     </div>
