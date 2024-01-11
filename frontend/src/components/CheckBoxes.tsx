@@ -23,7 +23,6 @@ function CheckBoxes({
             id={option.value}
             {...props}
             value={option.value}
-            onChange={(e) => {}}
             className={option.buttonStyling ? "hidden" : ""}
           />
           <label

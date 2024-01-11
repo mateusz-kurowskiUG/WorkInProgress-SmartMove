@@ -21,7 +21,9 @@ export default function Home() {
               },
             ]}
           />
-          <Settings />
+          <StepContextProvider>
+            <Settings />
+          </StepContextProvider>
         </div>
 
         <DisplayMap />

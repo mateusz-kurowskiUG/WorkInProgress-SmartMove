@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./StepRoute.module.css";
+import SearchBar from "./SearchBar";
+import AddRoute from "./AddRoute";
 
 export default function StepRoute() {
+  const [generatedRoutesCount, setGenerateRoutesCount] = useState(1);
+
   return (
     <div>
       <ul className="steps steps-vertical">
@@ -20,8 +24,11 @@ export default function StepRoute() {
         >
           Stacja Mevo
         </li>
-        <li className="step">Stacja 1</li>
-        <li className="step">Stacja 2</li>
+        <AddRoute
+          no={generatedRoutesCount}
+          incrementNo={setGenerateRoutesCount}
+        />
+        {/* <li key={generatedRoutesCount} className="step"></li> */}
         <li data-content="🚲" className={`step`}>
           Stacja Mevo
         </li>
