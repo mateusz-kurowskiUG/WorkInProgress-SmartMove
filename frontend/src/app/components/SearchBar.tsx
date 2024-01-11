@@ -73,7 +73,7 @@ export default function SearchBar() {
         onSubmit={(e) => handleSubmit(e)}
         className="flex flex-col items-center "
       >
-        <div>
+        <div >
           <div className="relative">
             <label htmlFor="starting-point">Start: </label>
             <input
