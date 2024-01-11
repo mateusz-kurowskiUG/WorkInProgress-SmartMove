@@ -26,19 +26,18 @@ export default function SearchBar({
     AutoCompleteItem[] | null
   >(null);
 
-  const handleSubmit = (
-    e: React.ChangeEvent<HTMLInputElement> | React.FormEvent<HTMLFormElement>
-  ): void => {
+  const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
-    search.forEach((item) => {
-      fetchLocationByName(item.value, routeContext.setPoints);
-    });
+    fetchLocationByName(e.target.value, routeContext.setPoints);
+    console.log(routeContext.points);
   };
   const fetchLocationByName = async (
     location: string,
-    setPoints: (
-      value: React.SetStateAction<google.maps.LatLng[] | null>
-    ) => void
+    setPoints: React.Dispatch<
+      React.SetStateAction<
+        { name: String; latlng: google.maps.LatLng }[] | null
+      >
+    >
   ) => {
     const response = await axios.get(
       "http://localhost:5000/api/maps/search?input=" + location
@@ -46,10 +45,31 @@ export default function SearchBar({
     console.log(response.data);
     setPoints((prevPoints) => {
       if (prevPoints === null) {
-        return [response.data.results[0].geometry.location];
-      } else {
-        return [...prevPoints, response.data.results[0].geometry.location];
+        return [
+          {
+            name: defaultSearchFields[0].name,
+            latlng: response.data.results[0].geometry.location,
+          },
+        ];
       }
+
+      const newPoints = [...prevPoints];
+      console.log("New points: ", newPoints);
+      if (
+        newPoints.filter((item) => item.name === defaultSearchFields[0].name)
+          .length > 0
+      ) {
+        const index = newPoints.findIndex(
+          (item) => item.name === defaultSearchFields[0].name
+        );
+        console.log("Index: ", index);
+        newPoints[index].latlng = response.data.results[0].geometry.location;
+      } else
+        newPoints.push({
+          name: defaultSearchFields[0].name,
+          latlng: response.data.results[0].geometry.location,
+        });
+      return newPoints;
     });
   };
   const fetchAutocomplete = async (search: string): Promise<void> => {
@@ -77,10 +97,7 @@ export default function SearchBar({
 
   return (
     <div>
-      <form
-        onSubmit={(e) => handleSubmit(e)}
-        className="flex items-center gap-4"
-      >
+      <form className="flex items-center gap-4">
         <div className="flex flex-col gap-2">
           {search.map((item, index) => {
             return (
@@ -115,6 +132,7 @@ export default function SearchBar({
                             newSearch[index].value = e.target.value;
                             return newSearch;
                           });
+                          handleSubmit(e);
                         }}
                       />
                       <label className="btn btn-outline" htmlFor={item.placeId}>
@@ -125,10 +143,6 @@ export default function SearchBar({
               </div>
             );
           })}
-        </div>
-
-        <div>
-          <input className="btn btn-primary" type="submit" value="Search" />
         </div>
       </form>
     </div>
