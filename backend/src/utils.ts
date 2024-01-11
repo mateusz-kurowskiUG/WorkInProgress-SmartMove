@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import URLS from './URLs';
 import Waypoint from './classes/Waypoint';
 import LatLng from './interfaces/google_routes/LatLng';
@@ -6,6 +6,7 @@ import TWaypoint from './interfaces/google_routes/Waypoint.model';
 import ComputeRoutesInterface from './interfaces/google_routes/computeRoutes.model';
 import StationInterface from './interfaces/mevo/Station.model';
 import StationWithDistance from './interfaces/mevo/StationWithDistance';
+import RouteResponse from './interfaces/google_routes/RouteResponse.model';
 
 const API_KEY: string = process.env.GOOGLE_MAPS_KEY || '';
 export const findClosest: StationWithDistance[] = (stations: StationInterface[], cords: LatLng) => {
@@ -24,7 +25,7 @@ export const findClosest: StationWithDistance[] = (stations: StationInterface[],
       return { station, distance: Math.floor(distance * 1000 * 111) };
     });
 };
-export const findRoute = async (start: LatLng, end: LatLng, inter?: LatLng[]) => {
+export const findRoute = async (start: LatLng, end: LatLng, inter?: LatLng[]): RouteResponse[] | AxiosError => {
   const originWaypoint: Waypoint = new Waypoint(start.latitude, start.longitude);
   const destinationWaypoint: Waypoint = new Waypoint(end.latitude, end.longitude);
   const intermediatesWaypoint: TWaypoint[] = [];
@@ -60,9 +61,19 @@ export const findRoute = async (start: LatLng, end: LatLng, inter?: LatLng[]) =>
     });
 
     const { data } = response;
+    const result: RouteResponse[] = data.routes.map((route: any) => {
+      const { duration, distanceMeters, polyline } = route;
+      console.log(1);
 
-    return data;
-  } catch (e) {
+      const newRoute: RouteResponse = {
+        duration: duration.seconds,
+        distance: distanceMeters,
+        polyline: polyline.encodedPolyline
+      };
+      return newRoute;
+    });
+    return result;
+  } catch (e: unknown) {
     return e;
   }
 };
