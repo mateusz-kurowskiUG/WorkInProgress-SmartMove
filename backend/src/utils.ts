@@ -25,7 +25,11 @@ export const findClosest: StationWithDistance[] = (stations: StationInterface[],
       return { station, distance: Math.floor(distance * 1000 * 111) };
     });
 };
-export const findRoute = async (start: LatLng, end: LatLng, inter?: LatLng[]): RouteResponse[] | AxiosError => {
+export const findRoute = async (
+  start: LatLng,
+  end: LatLng,
+  inter?: LatLng[]
+): Promise<RouteResponse[] | AxiosError<unknown>> => {
   const originWaypoint: Waypoint = new Waypoint(start.latitude, start.longitude);
   const destinationWaypoint: Waypoint = new Waypoint(end.latitude, end.longitude);
   const intermediatesWaypoint: TWaypoint[] = [];
@@ -59,8 +63,6 @@ export const findRoute = async (start: LatLng, end: LatLng, inter?: LatLng[]): R
         'X-Goog-FieldMask': 'routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline'
       }
     });
-
-    console.log(1);
     const { data } = response;
     const result: RouteResponse[] = data.routes.map((route) => {
       const { duration, distanceMeters, polyline } = route;
