@@ -75,20 +75,20 @@ const DisplayMap = () => {
   }, []);
 
   useMemo(async () => {
-    if (routeContext.points && routeContext.points.length > 1) {
+    if (routeContext.directions && routeContext.directions.length > 1) {
       const response = await axios.post(
         "http://localhost:5000/api/maps/route",
         {
-          origin: routeContext.points[routeContext.points.length - 1],
-          destination: routeContext.points[0],
-          intermediary: routeContext.points.slice(1, -1),
+          origin: routeContext.directions[routeContext.directions.length - 1],
+          destination: routeContext.directions[0],
+          intermediary: routeContext.directions.slice(1, -1),
           rented: true,
         }
       );
       setPath(response.data[0]);
-      setLocation(routeContext.points[0]);
+      setLocation(routeContext.directions[0]);
     }
-  }, [routeContext.points]);
+  }, [routeContext.directions]);
 
   if (!isLoaded) {
     return <p>Loading...</p>;
@@ -117,8 +117,8 @@ const DisplayMap = () => {
             path={google.maps.geometry.encoding.decodePath(path.polyline)}
           />
         )}
-        {routeContext.points &&
-          routeContext.points.map((point, index) => (
+        {routeContext.directions &&
+          routeContext.directions.map((point, index) => (
             <MarkerF key={index} position={point} />
           ))}
       </GoogleMap>

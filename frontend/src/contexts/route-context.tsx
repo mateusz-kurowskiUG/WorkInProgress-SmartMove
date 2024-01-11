@@ -12,8 +12,14 @@ interface RouteContextType {
   setIsRented: React.Dispatch<React.SetStateAction<boolean | null>>;
   chosenMeans: Means[] | "";
   setChosenMeans: React.Dispatch<React.SetStateAction<Means[] | "">>;
-  points: google.maps.LatLng[] | null;
-  setPoints: React.Dispatch<React.SetStateAction<google.maps.LatLng[] | null>>;
+  points: { name: String; latlng: google.maps.LatLng }[] | null;
+  setPoints: React.Dispatch<
+    React.SetStateAction<{ name: String; latlng: google.maps.LatLng }[] | null>
+  >;
+  directions: google.maps.LatLng[] | null;
+  setDirections: React.Dispatch<
+    React.SetStateAction<google.maps.LatLng[] | null>
+  >;
 }
 
 const RouteContext = createContext<RouteContextType | null>(null);
@@ -33,9 +39,12 @@ export default function RouteContextProvider({
 }: RouteContextProviderProps): JSX.Element {
   const [isRented, setIsRented] = useState<boolean | null>(null);
   const [chosenMeans, setChosenMeans] = useState<Means[] | "">("");
-  const [points, setPoints] = useState<google.maps.LatLng[] | null>(null);
-  const [directions, setDirections] =
-    useState<google.maps.DirectionsResult | null>(null);
+  const [points, setPoints] = useState<
+    { name: String; latlng: google.maps.LatLng }[] | null
+  >(null);
+  const [directions, setDirections] = useState<google.maps.LatLng[] | null>(
+    null
+  );
 
   return (
     <RouteContext.Provider
@@ -46,6 +55,8 @@ export default function RouteContextProvider({
         setChosenMeans,
         points,
         setPoints,
+        directions,
+        setDirections,
       }}
     >
       {children}
