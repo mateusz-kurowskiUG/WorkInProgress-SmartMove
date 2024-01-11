@@ -79,49 +79,55 @@ export default function SearchBar({
 
   return (
     <div>
-      <form onSubmit={(e) => handleSubmit(e)}>
-        {search.map((item, index) => {
-          return (
-            <div key={index}>
-              <input
-                className="input input-primary"
-                value={search[index].value}
-                onChange={(e) => {
-                  setSearch((prevSearch) => {
-                    const newSearch = [...prevSearch];
-                    newSearch[index].value = e.target.value;
-                    return newSearch;
-                  });
-                  handleOnChange(e, index);
-                }}
-              />
-              {autocomplete !== null &&
-                currentlySelected === index &&
-                autocomplete.map((item) => (
-                  <div key={item.placeId}>
-                    <input
-                      hidden
-                      id={item.placeId}
-                      type="radio"
-                      name="autocomplete"
-                      value={item.description}
-                      onChange={(e) => {
-                        setAutocomplete(null);
-                        setSearch((prevSearch) => {
-                          const newSearch = [...prevSearch];
-                          newSearch[index].value = e.target.value;
-                          return newSearch;
-                        });
-                      }}
-                    />
-                    <label className="btn btn-outline" htmlFor={item.placeId}>
-                      {item.description}
-                    </label>
-                  </div>
-                ))}
-            </div>
-          );
-        })}
+      <form
+        onSubmit={(e) => handleSubmit(e)}
+        className="flex items-center gap-4"
+      >
+        <div className="flex flex-col gap-2">
+          {search.map((item, index) => {
+            return (
+              <div key={index}>
+                <input
+                  className="input input-primary"
+                  placeholder={"test"}
+                  value={search[index].value}
+                  onChange={(e) => {
+                    setSearch((prevSearch) => {
+                      const newSearch = [...prevSearch];
+                      newSearch[index].value = e.target.value;
+                      return newSearch;
+                    });
+                    handleOnChange(e, index);
+                  }}
+                />
+                {autocomplete !== null &&
+                  currentlySelected === index &&
+                  autocomplete.map((item) => (
+                    <div key={item.placeId}>
+                      <input
+                        hidden
+                        id={item.placeId}
+                        type="radio"
+                        name="autocomplete"
+                        value={item.description}
+                        onChange={(e) => {
+                          setAutocomplete(null);
+                          setSearch((prevSearch) => {
+                            const newSearch = [...prevSearch];
+                            newSearch[index].value = e.target.value;
+                            return newSearch;
+                          });
+                        }}
+                      />
+                      <label className="btn btn-outline" htmlFor={item.placeId}>
+                        {item.description}
+                      </label>
+                    </div>
+                  ))}
+              </div>
+            );
+          })}
+        </div>
 
         <div>
           <input className="btn btn-primary" type="submit" value="Search" />
