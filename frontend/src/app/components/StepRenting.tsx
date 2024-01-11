@@ -1,5 +1,6 @@
 import RadioButtons from "@/components/RadioButtons";
 import { useRouteContext } from "@/contexts/route-context";
+import { useStepContext } from "@/contexts/step-context";
 import { FormOption } from "@/models/form-option";
 import { Form, Formik } from "formik";
 import React from "react";
@@ -7,6 +8,7 @@ import * as Yup from "yup";
 
 export default function StepRenting() {
   const { setIsRented } = useRouteContext();
+  const { setCurrStep } = useStepContext();
 
   const isRentedOptions: FormOption[] = [
     { label: "Chcę wynająć", value: "false", buttonStyling: "btn btn-primary" },
@@ -19,6 +21,7 @@ export default function StepRenting() {
 
   const handleSubmit = (isRented) => {
     setIsRented(isRented.target.value);
+    setCurrStep(2);
   };
 
   return (
