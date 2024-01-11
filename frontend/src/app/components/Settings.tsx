@@ -4,9 +4,10 @@ import React, { useState } from "react";
 import StepRenting from "./StepRenting";
 import StepRoute from "./StepRoute";
 import StepVehicle from "./StepVehicle";
+import { useStepContext } from "@/contexts/step-context";
 
 export default function Settings() {
-  const [currStep, setCurrStep] = useState<number>(1);
+  const { currStep, setCurrStep } = useStepContext();
 
   const steps = [
     {
@@ -44,7 +45,7 @@ export default function Settings() {
   }
 
   return (
-    <div>
+    <div className="bg-slate-800 absolute z-10">
       <div className="steps text-xs flex justify-center">
         {steps.map((step) => (
           <button
