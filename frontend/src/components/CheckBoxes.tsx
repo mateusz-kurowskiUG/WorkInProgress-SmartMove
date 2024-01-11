@@ -13,6 +13,7 @@ function CheckBoxes({
   options,
   ...props
 }: CheckBoxesProps): JSX.Element {
+  const context = React.useContext(Field);
   return (
     <div className="flex justify-evenly">
       {label && <label>{label}:</label>}
@@ -27,7 +28,7 @@ function CheckBoxes({
           />
           <label
             htmlFor={option.value.toString()}
-            className={option.buttonStyling ? option.buttonStyling : ""}
+            className={(option.buttonStyling ? option.buttonStyling : "") + ``}
           >
             {option.label}
           </label>
