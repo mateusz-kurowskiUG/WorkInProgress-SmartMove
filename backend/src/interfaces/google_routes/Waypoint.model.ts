@@ -1,13 +1,14 @@
+import LocationLocationInterface from './Location.model';
+
 type TWaypoint = WaypointInterface & TUnionWaypoint;
 interface WaypointInterface {
-  via: boolean;
+  via: false;
   vehicleStopover: boolean;
-  sideOfRoad: '';
 }
 
 type TUnionWaypoint = LocationInterface | PlaceIdInterface | AddressInterface;
 interface LocationInterface {
-  location: string;
+  location: LocationLocationInterface;
 }
 interface PlaceIdInterface {
   placeId: string;
