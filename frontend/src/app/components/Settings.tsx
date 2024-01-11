@@ -5,20 +5,24 @@ import StepRenting from "./StepRenting";
 import StepRoute from "./StepRoute";
 import StepVehicle from "./StepVehicle";
 import { useStepContext } from "@/contexts/step-context";
+import { useRouteContext } from "@/contexts/route-context";
 
 export default function Settings() {
   const { currStep, setCurrStep } = useStepContext();
+  const { isRented, chosenMeans } = useRouteContext();
 
   const steps = [
     {
       step: 1,
       component: StepRenting,
       text: "Czy wypożyczasz?",
+      isValue: !!isRented,
     },
     {
       step: 2,
       component: StepVehicle,
       text: "Czym jedziesz?",
+      isValue: !!chosenMeans,
     },
     {
       step: 3,
@@ -51,7 +55,11 @@ export default function Settings() {
           <button
             key={step.step}
             className={`flex-1 step ${
-              step.step <= currStep ? "step-primary" : ""
+              step.step <= currStep
+                ? step.isValue
+                  ? "step-primary"
+                  : "step-error"
+                : ""
             }`}
             onClick={() => setCurrStep(step.step)}
           >
