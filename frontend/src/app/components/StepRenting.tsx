@@ -18,13 +18,13 @@ export default function StepRenting() {
     {
       label: "Chcę wynająć",
       value: "false",
-      buttonStyling: "btn btn-primary w-20",
+      buttonStyling: "btn btn-primary wd-25 h-25 text-center",
       Icon: MdOutlineDirectionsBike,
     },
     {
       label: "Wynajmuję",
       value: "true",
-      buttonStyling: "btn btn-secondary w-20",
+      buttonStyling: "btn btn-secondary wd-25 h-25 text-center",
       Icon: GiAwareness,
     },
   ];
