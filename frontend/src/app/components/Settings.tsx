@@ -45,12 +45,14 @@ export default function Settings() {
   }
 
   return (
-    <div className="bg-slate-800 absolute z-10">
-      <div className="steps text-xs flex justify-center">
+    <div>
+      <div className="steps text-xs flex ">
         {steps.map((step) => (
           <button
             key={step.step}
-            className={`step ${step.step <= currStep ? "step-primary" : ""}`}
+            className={`flex-1 step ${
+              step.step <= currStep ? "step-primary" : ""
+            }`}
             onClick={() => setCurrStep(step.step)}
           >
             {step.text}

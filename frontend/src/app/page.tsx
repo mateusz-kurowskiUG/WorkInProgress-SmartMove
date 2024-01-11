@@ -8,10 +8,13 @@ export default function Home() {
   return (
     <div>
       <RouteContextProvider>
-        <SearchBar />
-        <StepContextProvider>
-          <Settings />
-        </StepContextProvider>
+        <div className="bg-neutral absolute z-10 w-full">
+          <SearchBar />
+          <StepContextProvider>
+            <Settings />
+          </StepContextProvider>
+        </div>
+
         <DisplayMap />
       </RouteContextProvider>
     </div>
