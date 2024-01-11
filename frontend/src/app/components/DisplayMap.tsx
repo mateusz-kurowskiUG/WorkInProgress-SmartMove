@@ -76,12 +76,19 @@ const DisplayMap = () => {
 
   useMemo(async () => {
     if (routeContext.directions && routeContext.directions.length > 1) {
+      console.log(
+        routeContext.directions.slice(1, routeContext.directions.length - 1)
+      );
+      console.log(routeContext.directions);
       const response = await axios.post(
         "http://localhost:5000/api/maps/route",
         {
           origin: routeContext.directions[routeContext.directions.length - 1],
           destination: routeContext.directions[0],
-          intermediary: routeContext.directions.slice(1, -1),
+          intermediate: routeContext.directions.slice(
+            1,
+            routeContext.directions.length - 1
+          ),
           rented: true,
         }
       );
