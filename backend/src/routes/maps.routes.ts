@@ -2,6 +2,10 @@ import { Router, Response, Request } from 'express';
 import URLS from 'src/URLs';
 import axios, { AxiosResponse } from 'axios';
 import AutocompletePredictionInterface from 'src/interfaces/google_routes/AutocompleteResponse.model';
+import LatLng from 'src/interfaces/google_routes/LatLng';
+import { downloadStations, findClosest, findRoute, validateLatLng } from 'src/utils';
+import StationInterface from 'src/interfaces/mevo/Station.model';
+import StationWithDistance from 'src/interfaces/mevo/StationWithDistance';
 
 const API_KEY: string = process.env.GOOGLE_MAPS_KEY || '';
 const mapsRouter: Router = Router();
@@ -27,7 +31,6 @@ mapsRouter.get('/autocomplete', async (req: Request, res: Response) => {
       URLS['googleAutoComplete'] +
       `?input=${input}&key=${API_KEY}&radius=1200&locationrestriction=circle:12000@54.397398%2018.571607&fields=formatted_address%2Cdescription";//`;
     const response: AxiosResponse = await axios.get(url);
-    console.log(response.data);
 
     if (response.status !== 200) return res.status(500).send('No response from Google');
 
@@ -47,6 +50,64 @@ mapsRouter.get('/autocomplete', async (req: Request, res: Response) => {
       }
     );
     return res.status(200).send(ourPreds);
+  } catch (e) {
+    return res.status(500).send(e);
+  }
+});
+
+const aToBWithMevo = async (A: LatLng, B: LatLng, inter: LatLng[]) => {
+  const stations: StationInterface[] = await downloadStations();
+
+  const aMevo: StationInterface = findClosest(stations, A)
+    .map((station: StationWithDistance) => station.station)
+    .slice(0, 1);
+
+  const bMevo: StationInterface = findClosest(stations, B)
+    .map((station: StationWithDistance) => station.station)
+    .slice(0, 1)[0];
+
+  const aMevoLatLng: LatLng = { latitude: aMevo.lat, longitude: aMevo.lon };
+  const bMevoLatLng: LatLng = { latitude: bMevo.lat, longitude: bMevo.lon };
+
+  return findRoute(aMevoLatLng, bMevoLatLng, [A, ...inter, B]);
+};
+// const z = () => {};
+
+mapsRouter.post('/route', async (req: Request, res: Response) => {
+  const { origin, destination, intermediate, rented, chosenMeans } = req.body;
+  if (!origin || !destination) return res.status(400).send('No origin or destination provided');
+  const origLat: number = origin.lat;
+  const origLng: number = origin.lng;
+  const destLat: number = destination.lat;
+  const destLng: number = destination.lng;
+  if (!origLng || !origLat || !destLng || !destLat) return res.status(400).send('No origin or destination provided');
+
+  const destCords: LatLng = {
+    latitude: destLat,
+    longitude: destLng
+  };
+  const origCords: LatLng = {
+    latitude: origLat,
+    longitude: origLng
+  };
+
+  if (!validateLatLng(destCords) || !validateLatLng(origCords))
+    return res.status(400).send('Invalid origin or destination provided');
+
+  if (!rented && !chosenMeans) return res.status(400).send('No chosen means provided');
+  if (chosenMeans === 'MEVO') {
+    try {
+      console.log(origCords, destCords, intermediate);
+
+      const res = await aToBWithMevo(origCords, destCords, intermediate);
+      return res.status(200).send(res);
+    } catch (e) {
+      return res.status(500).send(e);
+    }
+  }
+  try {
+    const result = await findRoute(origCords, destCords, intermediate);
+    return res.status(200).send(result);
   } catch (e) {
     return res.status(500).send(e);
   }
