@@ -15,7 +15,11 @@ interface AutoCompleteItem {
 
 export default function SearchBar() {
   const routeContext = useRouteContext();
-  const [search, setSearch] = React.useState("");
+  const [search, setSearch] = React.useState([
+    { name: "start", value: "" },
+    { name: "via", value: "" },
+    { name: "end", value: "" },
+  ]);
   const [searchEnd, setSearchEnd] = React.useState("");
 
   const [currentlySelected, setCurrentlySelected] = React.useState<number>(0);
@@ -24,25 +28,35 @@ export default function SearchBar() {
   >(null);
 
   const handleSubmit = (
-    e: React.ChangeEvent<HTMLInputElement> | React.FormEvent<HTMLFormElement>,
+    e: React.ChangeEvent<HTMLInputElement> | React.FormEvent<HTMLFormElement>
   ): void => {
     e.preventDefault();
-    fetchLocationByName(search, routeContext.setStartPoint);
-    fetchLocationByName(searchEnd, routeContext.setEndPoint);
+    routeContext.setPoints(null);
+    search.forEach((item) => {
+      fetchLocationByName(item.value, routeContext.setPoints);
+    });
   };
   const fetchLocationByName = async (
     location: string,
-    setPoint: (value: React.SetStateAction<google.maps.LatLng | null>) => void,
+    setPoints: (
+      value: React.SetStateAction<google.maps.LatLng[] | null>
+    ) => void
   ) => {
     const response = await axios.get(
-      "http://localhost:5000/api/maps/search?input=" + location,
+      "http://localhost:5000/api/maps/search?input=" + location
     );
     console.log(response.data);
-    setPoint(response.data.results[0].geometry.location);
+    setPoints((prevPoints) => {
+      if (prevPoints === null) {
+        return [response.data.results[0].geometry.location];
+      } else {
+        return [...prevPoints, response.data.results[0].geometry.location];
+      }
+    });
   };
   const fetchAutocomplete = async (search: string): Promise<void> => {
     const response = await axios.get(
-      "http://localhost:5000/api/maps/autocomplete?input=" + search,
+      "http://localhost:5000/api/maps/autocomplete?input=" + search
     );
     setAutocomplete(response.data);
   };
@@ -55,7 +69,7 @@ export default function SearchBar() {
 
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    id: number,
+    id: number
   ): void => {
     e.preventDefault();
     setCurrentlySelected(id);
@@ -66,66 +80,49 @@ export default function SearchBar() {
   return (
     <div>
       <form onSubmit={(e) => handleSubmit(e)}>
-        <div>
-          <input
-            className="input input-primary"
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              handleOnChange(e, 0);
-            }}
-          />
-          {autocomplete !== null &&
-            currentlySelected === 0 &&
-            autocomplete.map((item) => (
-              <div key={item.placeId}>
-                <input
-                  hidden
-                  id={item.placeId}
-                  type="radio"
-                  name="autocomplete"
-                  value={item.description}
-                  onChange={(e) => {
-                    setAutocomplete(null);
-                    setSearch(e.target.value);
-                  }}
-                />
-                <label className="btn btn-outline" htmlFor={item.placeId}>
-                  {item.description}
-                </label>
-              </div>
-            ))}
-        </div>
-        <div>
-          <input
-            className="input input-primary"
-            value={searchEnd}
-            onChange={(e) => {
-              handleOnChange(e, 1);
-              setSearchEnd(e.target.value);
-            }}
-          />
-          {autocomplete !== null &&
-            currentlySelected === 1 &&
-            autocomplete.map((item) => (
-              <div key={item.placeId}>
-                <input
-                  hidden
-                  id={item.placeId}
-                  type="radio"
-                  name="autocomplete"
-                  value={item.description}
-                  onChange={(e) => {
-                    setAutocomplete(null);
-                    setSearchEnd(e.target.value);
-                  }}
-                />
-                <label className="btn btn-outline" htmlFor={item.placeId}>
-                  {item.description}
-                </label>
-              </div>
-            ))}
-        </div>
+        {search.map((item, index) => {
+          return (
+            <div key={index}>
+              <input
+                className="input input-primary"
+                value={search[index].value}
+                onChange={(e) => {
+                  setSearch((prevSearch) => {
+                    const newSearch = [...prevSearch];
+                    newSearch[index].value = e.target.value;
+                    return newSearch;
+                  });
+                  handleOnChange(e, index);
+                }}
+              />
+              {autocomplete !== null &&
+                currentlySelected === index &&
+                autocomplete.map((item) => (
+                  <div key={item.placeId}>
+                    <input
+                      hidden
+                      id={item.placeId}
+                      type="radio"
+                      name="autocomplete"
+                      value={item.description}
+                      onChange={(e) => {
+                        setAutocomplete(null);
+                        setSearch((prevSearch) => {
+                          const newSearch = [...prevSearch];
+                          newSearch[index].value = e.target.value;
+                          return newSearch;
+                        });
+                      }}
+                    />
+                    <label className="btn btn-outline" htmlFor={item.placeId}>
+                      {item.description}
+                    </label>
+                  </div>
+                ))}
+            </div>
+          );
+        })}
+
         <div>
           <input className="btn btn-primary" type="submit" value="Search" />
         </div>
