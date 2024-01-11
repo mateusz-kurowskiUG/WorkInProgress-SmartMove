@@ -1,5 +1,6 @@
 "use client";
 
+import { Means } from "@/enums/means.enum";
 import { createContext, useContext, useState } from "react";
 
 interface RouteContextProviderProps {
@@ -15,6 +16,8 @@ interface RouteContextType {
   setEndPoint: React.Dispatch<React.SetStateAction<google.maps.LatLng | null>>;
   isRented: boolean | null;
   setIsRented: React.Dispatch<React.SetStateAction<boolean | null>>;
+  chosenMeans: Means[] | "";
+  setChosenMeans: React.Dispatch<React.SetStateAction<Means[] | "">>;
 }
 
 const RouteContext = createContext<RouteContextType | null>(null);
@@ -35,6 +38,8 @@ export default function RouteContextProvider({
   const [startPoint, setStartPoint] = useState<google.maps.LatLng | null>(null);
   const [endPoint, setEndPoint] = useState<google.maps.LatLng | null>(null);
   const [isRented, setIsRented] = useState<boolean | null>(null);
+  const [chosenMeans, setChosenMeans] = useState<Means[] | "">("");
+  
 
   return (
     <RouteContext.Provider
@@ -45,6 +50,8 @@ export default function RouteContextProvider({
         setEndPoint,
         isRented,
         setIsRented,
+        chosenMeans,
+        setChosenMeans,
       }}
     >
       {children}

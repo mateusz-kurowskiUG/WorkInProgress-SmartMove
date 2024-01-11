@@ -2,7 +2,7 @@ import RadioButtons from "@/components/RadioButtons";
 import { useRouteContext } from "@/contexts/route-context";
 import { useStepContext } from "@/contexts/step-context";
 import { FormOption } from "@/models/form-option";
-import { ErrorMessage, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import React from "react";
 import * as Yup from "yup";
 
