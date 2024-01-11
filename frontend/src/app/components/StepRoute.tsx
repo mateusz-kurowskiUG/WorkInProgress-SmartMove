@@ -36,7 +36,6 @@ export default function StepRoute() {
           no={generatedRoutesCount}
           incrementNo={setGenerateRoutesCount}
         />
-        {/* <li key={generatedRoutesCount} className="step"></li> */}
         <li data-content="🚲" className={`step`}>
           Stacja Mevo
         </li>

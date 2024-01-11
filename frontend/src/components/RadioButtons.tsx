@@ -1,7 +1,7 @@
 import React from "react";
 import { Field, ErrorMessage } from "formik";
 import { FormOption } from "@/models/form-option";
-import { IconType } from "react-icons";
+import { useRouteContext } from "@/contexts/route-context";
 
 interface RadioButtonsProps {
   label?: string;
@@ -16,6 +16,8 @@ function RadioButtons({
   instantSubmit,
   ...props
 }: RadioButtonsProps): JSX.Element {
+  const { chosenMeans } = useRouteContext();
+
   return (
     <div className="flex flex-col">
       <div className="flex py-2 justify-evenly">
