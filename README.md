@@ -1,5 +1,5 @@
 # WorkInProgress-SmartMove
-Smart city project for purpouses of BCM 2024.
+Smart city project for purposes of BCM 2024.
 
 
 ## How to launch
