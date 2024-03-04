@@ -8,6 +8,9 @@ dependencies:
   '@googlemaps/js-api-loader':
     specifier: ^1.16.2
     version: 1.16.2
+  '@types/google.maps':
+    specifier: ^3.54.10
+    version: 3.54.10
   axios:
     specifier: ^1.6.5
     version: 1.6.5
@@ -431,6 +434,10 @@ packages:
       '@types/qs': 6.9.11
       '@types/serve-static': 1.15.5
     dev: true
+
+  /@types/google.maps@3.54.10:
+    resolution: {integrity: sha512-N6gwM01mKhooXaw+IKbUH7wJcIJCn8U60VoaVvom5EiQjmfgevhQ+0+/r17beXW5j8ad2x+WPr0iyOUodCw4/w==}
+    dev: false
 
   /@types/http-errors@2.0.4:
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
